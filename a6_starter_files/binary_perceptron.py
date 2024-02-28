@@ -9,7 +9,7 @@ called run_2_class_2_feature_iris_data.py.
 
 
 def student_name():
-    return "Prashant Rangarajan"  # Replace with your own name here
+    return "Allison Ho and Marina Wooden"  # Replace with your own name here
 
 
 class BinaryPerceptron:
@@ -18,7 +18,7 @@ class BinaryPerceptron:
     ---
     It is an algorithm that can learn a binary classifier
     """
-    
+
     def __init__(self, weights=None, alpha=0.5):
         """
         Initialize the Binary Perceptron
@@ -31,7 +31,7 @@ class BinaryPerceptron:
         else:
             self.weights = weights[:]
         self.alpha = alpha
-    
+
     def classify(self, x_vector):
         """
         Method that classifies a given data point into one of 2 classes
@@ -46,8 +46,21 @@ class BinaryPerceptron:
         else  -1 if it is classified as negative.
         """
         # ADD YOUR CODE HERE
-        raise NotImplementedError
-    
+        # weighted sum = weights * inputs + bias
+
+        # calculate dot product of weights and input vector
+        dot_product = sum(w * i for w, i in zip(self.weights[:-1], x_vector))
+
+        # add bias
+        dot_product += self.weights[-1]
+
+        # compare weighted sum with the threshold (theta)
+        if dot_product >= 0:
+            return +1
+        else:
+            return -1
+
+
     def train_with_one_example(self, x_vector, y):
         """
         Method that updates the model weights using a particular training example (x_vector,y)
@@ -63,8 +76,22 @@ class BinaryPerceptron:
                         else False
         """
         # ADD YOUR CODE HERE
-        raise NotImplementedError
-    
+        predicted = self.classify(x_vector)
+
+        # if there's a misclassification update the weights
+        if predicted != y:
+            for i in range(len(x_vector)):
+                # w_{k + 1} = w_k -+ c_k * X_k
+                self.weights[i] = self.weights[i] + y * self.alpha * x_vector[i]
+
+            # update the bias weights (the same as other weights but input is always 1)
+            self.weights[-1] = self.weights[-1] + y * self.alpha * 1
+
+            return True
+        else:
+            return False
+
+
     def train_for_an_epoch(self, training_data):
         """
         Method that goes through the given training examples once, in the order supplied,
@@ -80,7 +107,14 @@ class BinaryPerceptron:
         (If zero, then training has converged.)
         """
         # ADD YOUR CODE HERE
-        raise NotImplementedError
+        changed_count = 0
+        for input in training_data:
+            change_weight = self.train_with_one_example(input[:-1], input[-1])
+
+            if change_weight:
+                changed_count += 1
+
+        return changed_count
 
 
 def sample_test():
