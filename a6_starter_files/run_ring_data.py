@@ -49,7 +49,7 @@ class PlotRingBP(PlotBinaryPerceptron):
         plt.title("Ring data")
         plt.xlabel("x1 axis")
         plt.ylabel("x2 axis")
-        plt.legend(loc='legend')
+        plt.legend(loc='upper right')
         plt.show()
 
 
