@@ -2,6 +2,7 @@ from binary_perceptron import BinaryPerceptron # Your implementation of binary p
 from plot_bp import PlotBinaryPerceptron
 import csv  # For loading data.
 from matplotlib import pyplot as plt  # For creating plots.
+from remapper import remap
 
 class PlotRingBP(PlotBinaryPerceptron):
     """
@@ -10,8 +11,10 @@ class PlotRingBP(PlotBinaryPerceptron):
     Extends the class PlotBinaryPerceptron
     """
 
-    def __init__(self, bp, plot_all=True, n_epochs=20):
+    def __init__(self, bp, plot_all=True, n_epochs=20, IS_REMAPPED=False):
         super().__init__(bp, plot_all, n_epochs) # Calls the constructor of the super class
+
+        self.IS_REMAPPED = IS_REMAPPED
 
     def read_data(self):
         """
@@ -21,8 +24,17 @@ class PlotRingBP(PlotBinaryPerceptron):
         Overrides the method in PlotBinaryPerceptron
         """
         data_as_strings = list(csv.reader(open('ring-data.csv'), delimiter=','))
+        if self.IS_REMAPPED:
+            data_as_strings = [remap(float(f1), float(f2)) + [c] for f1, f2, c in data_as_strings ]
+
         self.TRAINING_DATA = [[float(f1), float(f2), int(c)] for [f1, f2, c] in data_as_strings]
         data_as_strings = list(csv.reader(open('ring-data.csv'), delimiter=','))
+
+        if self.IS_REMAPPED:
+            data_as_strings = [remap(float(f1), float(f2)) + [c] for f1, f2, c in data_as_strings ]
+
+        print(data_as_strings)
+        
         self.TESTING_DATA = [[float(f1), float(f2), int(c)] for [f1, f2, c] in data_as_strings]
 
     def test(self):
