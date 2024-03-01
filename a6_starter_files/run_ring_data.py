@@ -28,13 +28,6 @@ class PlotRingBP(PlotBinaryPerceptron):
             data_as_strings = [remap(float(f1), float(f2)) + [c] for f1, f2, c in data_as_strings ]
 
         self.TRAINING_DATA = [[float(f1), float(f2), int(c)] for [f1, f2, c] in data_as_strings]
-        data_as_strings = list(csv.reader(open('ring-data.csv'), delimiter=','))
-
-        if self.IS_REMAPPED:
-            data_as_strings = [remap(float(f1), float(f2)) + [c] for f1, f2, c in data_as_strings ]
-
-        print(data_as_strings)
-        
         self.TESTING_DATA = [[float(f1), float(f2), int(c)] for [f1, f2, c] in data_as_strings]
 
     def test(self):
@@ -67,7 +60,7 @@ class PlotRingBP(PlotBinaryPerceptron):
 
 if __name__=='__main__':
     binary_perceptron = BinaryPerceptron(alpha=0.5)
-    pbp = PlotRingBP(binary_perceptron)
+    pbp = PlotRingBP(binary_perceptron, IS_REMAPPED=True)
     pbp.train()
     pbp.test()
     pbp.plot()
